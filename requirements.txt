@@ -1,0 +1,18 @@
+# Generate a virtual environment to kick off this project 
+# python -m venv mlg
+# to activate:
+# source mlg/bin/activate
+
+# Then run:
+# pip install -r requirements.txt 
+# to install all the necessary libraries for this project
+
+networkx 
+scipy
+numpy
+scikit-learn
+matplotlib
+torch
+torch-geometric
+pandas
+shap
