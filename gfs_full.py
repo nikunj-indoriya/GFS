@@ -1,17 +1,26 @@
 #!/usr/bin/env python3
 """
-gfs_full.py - GFS full training script with caching, robust numeric handling,
-and median/IQR scaling + clipping for handcrafted features.
+gfs_full.py
 
-Key improvements (Option A):
- - Loads cleaned features if available: data/features_combined_cleaned.pkl
- - Median / IQR scaling for spectral + distributional views (computed from features)
- - Median / IQR scaling for motif view (computed from motifs during cache build)
- - Clip scaled values to [-10, 10] (safe default)
- - Defensive padding/truncation everywhere to avoid matmul shape errors
- - Safe numerical guards: nan/inf cleanup and skip/backoff when loss is NaN
- - Contrastive loss disabled by default for stability (CFG["use_contrast"] = False)
- - Caches built once and reused on subsequent runs
+Graph Fusion System (GFS) full training pipeline.
+
+This script trains a multi-view graph classifier that fuses:
+1. Neural graph embeddings (GIN over node degree + clustering features)
+2. Spectral handcrafted features
+3. Motif-based structural features
+4. Distributional graph statistics
+
+Key design goals of this implementation:
+- Robust handling of noisy, missing, or inconsistent handcrafted features
+- Median / IQR based scaling for heavy-tailed graph statistics
+- Aggressive numerical safety to avoid NaN/Inf propagation
+- Disk caching for graphs, handcrafted features, and scalers
+- Modular architecture enabling ablations and research extensions
+
+Stability-oriented defaults:
+- Contrastive loss disabled by default
+- Gradient clipping enabled
+- Defensive padding and reshaping everywhere
 """
 
 import os
